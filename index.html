@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HTML Quick Styler</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <style>
+:root {
+  --primary:       #6366F1;
+  --primary-light: #818CF8;
+  --primary-dark:  #4338CA;
+  --cyan:          #06B6D4;
+  --cyan-light:    #22D3EE;
+  --success:       #10B981;
+  --danger:        #EF4444;
+  --warning:       #F59E0B;
+  --bg-base:       #0D0D1A;
+  --bg-surface:    #12121F;
+  --bg-panel:      #16162A;
+  --bg-elevated:   #1C1C32;
+  --bg-input:      #1E1E35;
+  --bg-hover:      #252540;
+  --border:        rgba(255,255,255,0.07);
+  --border-mid:    rgba(255,255,255,0.12);
+  --border-bright: rgba(99,102,241,0.4);
+  --text-primary:  #F1F5F9;
+  --text-secondary:#94A3B8;
+  --text-muted:    #64748B;
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  16px;
+  --radius-xl:  22px;
+  --shadow-sm:  0 2px 8px rgba(0,0,0,0.4);
+  --shadow-md:  0 4px 20px rgba(0,0,0,0.5);
+  --shadow-lg:  0 8px 40px rgba(0,0,0,0.6);
+  --shadow-glow: 0 0 30px rgba(99,102,241,0.2);
+  --font-ui:   'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-brand:'Syne', sans-serif;
+  --panel-width: 320px;
+  --header-h:    64px;
+  --transition:  0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+[data-theme="light"] {
+  --bg-base:       #F1F5F9;
+  --bg-surface:    #FFFFFF;
+  --bg-panel:      #FFFFFF;
+  --bg-elevated:   #F8FAFC;
+  --bg-input:      #F1F5F9;
+  --bg-hover:      #E2E8F0;
+  --border:        rgba(0,0,0,0.08);
+  --border-mid:    rgba(0,0,0,0.12);
+  --text-primary:  #0F172A;
+  --text-secondary:#475569;
+  --text-muted:    #94A3B8;
+  --shadow-sm:  0 2px 8px rgba(0,0,0,0.08);
+  --shadow-md:  0 4px 20px rgba(0,0,0,0.1);
+  --shadow-lg:  0 8px 40px rgba(0,0,0,0.15);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; scroll-behavior: smooth; }
+body {
+  font-family: var(--font-ui);
+  background: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.6;
+  overflow-x: hidden;
+  transition: background var(--transition), color var(--transition);
+}
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+h1, h2, h3 { font-family: var(--font-brand); line-height: 1.2; }
+::selection { background: rgba(99,102,241,0.35); color: var(--text-primary); }
+.app-header {
+  position: sticky; top: 0; z-index: 100;
+  height: var(--header-h);
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+.app-header::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--cyan), var(--primary));
+  background-size: 200% 100%;
+  animation: headerGradient 4s linear infinite;
+}
+@keyframes headerGradient {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+.header-inner {
+  max-width: 1600px; margin: 0 auto; padding: 0 20px; height: 100%;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.header-brand { display: flex; align-items: center; gap: 12px; }
+.brand-icon { flex-shrink: 0; display: flex; align-items: center; filter: drop-shadow(0 0 12px rgba(99,102,241,0.5)); }
+.header-title {
+  font-size: 1.3rem; font-weight: 800;
+  background: linear-gradient(135deg, var(--text-primary) 30%, var(--primary-light));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  letter-spacing: -0.5px;
+}
+.header-subtitle { font-size: 0.75rem; color: var(--text-muted); font-weight: 400; }
+.header-actions { display: flex; align-items: center; gap: 8px; }
+.header-badge {
+  font-family: var(--font-mono); font-size: 0.7rem; font-weight: 500;
+  padding: 3px 8px; background: rgba(99,102,241,0.15);
+  border: 1px solid rgba(99,102,241,0.3); border-radius: 99px; color: var(--primary-light);
+}
+.header-btn {
+  width: 36px; height: 36px; border: 1px solid var(--border-mid);
+  background: var(--bg-elevated); border-radius: var(--radius-md);
+  color: var(--text-secondary); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition); font-size: 1rem;
+}
+.header-btn:hover { background: var(--bg-hover); color: var(--text-primary); border-color: var(--border-bright); }
+.mobile-menu-btn { display: none; }
+.app-main {
+  max-width: 1600px; margin: 0 auto; padding: 20px;
+  display: grid; grid-template-columns: var(--panel-width) 1fr;
+  gap: 20px; align-items: start;
+}
+.control-panel {
+  background: var(--bg-panel); border: 1px solid var(--border);
+  border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-md);
+  position: sticky; top: calc(var(--header-h) + 20px);
+  max-height: calc(100vh - var(--header-h) - 40px);
+  display: flex; flex-direction: column;
+}
+.panel-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px; border-bottom: 1px solid var(--border);
+  background: var(--bg-elevated); flex-shrink: 0;
+}
+.panel-label {
+  font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted);
+}
+.panel-collapse-btn {
+  width: 28px; height: 28px; border: 1px solid var(--border);
+  background: transparent; border-radius: var(--radius-sm);
+  color: var(--text-muted); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition);
+}
+.panel-collapse-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+.controls-body { overflow-y: auto; flex: 1; padding: 8px; }
+.control-section {
+  border-radius: var(--radius-md); overflow: hidden; margin-bottom: 4px;
+  border: 1px solid transparent; transition: border-color var(--transition);
+}
+.control-section:hover { border-color: var(--border); }
+.section-header {
+  width: 100%; display: flex; align-items: center; gap: 8px;
+  padding: 10px 12px; background: transparent; border: none;
+  color: var(--text-secondary); cursor: pointer; font-family: var(--font-ui);
+  font-size: 0.82rem; font-weight: 500; border-radius: var(--radius-md);
+  transition: all var(--transition); text-align: left;
+}
+.section-header:hover { background: var(--bg-hover); color: var(--text-primary); }
+.section-header[aria-expanded="true"] { color: var(--text-primary); }
+.section-icon { font-size: 0.9rem; }
+.chevron { margin-left: auto; transition: transform var(--transition); flex-shrink: 0; }
+.section-header[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+.section-body {
+  padding: 0 12px 12px; display: flex; flex-direction: column; gap: 14px;
+  overflow: hidden; animation: sectionOpen 0.2s ease;
+}
+.section-body.collapsed { display: none; }
+@keyframes sectionOpen {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.control-group { display: flex; flex-direction: column; gap: 6px; }
+.ctrl-label {
+  font-size: 0.75rem; font-weight: 500; color: var(--text-secondary);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.ctrl-value {
+  font-family: var(--font-mono); font-size: 0.7rem; color: var(--primary-light);
+  background: rgba(99,102,241,0.1); padding: 1px 6px; border-radius: 4px;
+}
+.ctrl-input {
+  width: 100%; padding: 8px 12px; background: var(--bg-input);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  color: var(--text-primary); font-family: var(--font-ui); font-size: 0.83rem;
+  transition: border-color var(--transition), box-shadow var(--transition); outline: none;
+}
+.ctrl-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.15); }
+.ctrl-input::placeholder { color: var(--text-muted); }
+.ctrl-select {
+  width: 100%; padding: 8px 12px; background: var(--bg-input);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  color: var(--text-primary); font-family: var(--font-ui); font-size: 0.83rem;
+  outline: none; cursor: pointer; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2364748B' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center;
+  transition: border-color var(--transition);
+}
+.ctrl-select:focus { border-color: var(--primary); }
+.ctrl-slider {
+  width: 100%; height: 4px; appearance: none; -webkit-appearance: none;
+  background: var(--bg-hover); border-radius: 99px; outline: none; cursor: pointer;
+}
+.ctrl-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%;
+  background: var(--primary); border: 2px solid var(--bg-panel);
+  box-shadow: 0 0 0 2px rgba(99,102,241,0.3); cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.ctrl-slider::-webkit-slider-thumb:hover { transform: scale(1.2); box-shadow: 0 0 0 4px rgba(99,102,241,0.25); }
+.ctrl-slider::-moz-range-thumb {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--primary); border: 2px solid var(--bg-panel); cursor: pointer;
+}
+.color-row { flex-direction: row; gap: 12px; }
+.color-item { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.color-input-wrap {
+  display: flex; align-items: center; gap: 8px; background: var(--bg-input);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 5px 8px; transition: border-color var(--transition);
+}
+.color-input-wrap:focus-within { border-color: var(--primary); }
+.ctrl-color { width: 28px; height: 28px; padding: 2px; border: none; border-radius: 6px; background: transparent; cursor: pointer; outline: none; }
+.ctrl-color::-webkit-color-swatch-wrapper { padding: 0; }
+.ctrl-color::-webkit-color-swatch { border: none; border-radius: 4px; }
+.color-hex { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-secondary); flex: 1; }
+.toggle-row { flex-direction: row; align-items: center; justify-content: space-between; }
+.toggle-switch { position: relative; display: inline-block; width: 40px; height: 22px; cursor: pointer; flex-shrink: 0; }
+.toggle-switch input { display: none; }
+.toggle-track {
+  position: absolute; inset: 0; background: var(--bg-hover);
+  border-radius: 99px; border: 1px solid var(--border); transition: all var(--transition);
+}
+.toggle-track::after {
+  content: ''; position: absolute; width: 16px; height: 16px;
+  border-radius: 50%; background: var(--text-muted); top: 2px; left: 2px;
+  transition: all var(--transition);
+}
+.toggle-switch input:checked + .toggle-track { background: rgba(99,102,241,0.2); border-color: var(--primary); }
+.toggle-switch input:checked + .toggle-track::after { transform: translateX(18px); background: var(--primary); box-shadow: 0 0 8px rgba(99,102,241,0.5); }
+.effects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.effect-btn {
+  display: flex; align-items: center; background: var(--bg-input);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 7px 10px; cursor: pointer; transition: all var(--transition);
+}
+.effect-btn input { display: none; }
+.effect-label { font-size: 0.78rem; color: var(--text-secondary); font-weight: 500; transition: color var(--transition); user-select: none; }
+.effect-btn:has(input:checked) { background: rgba(99,102,241,0.15); border-color: var(--primary); }
+.effect-btn:has(input:checked) .effect-label { color: var(--primary-light); }
+.effect-btn:hover { background: var(--bg-hover); border-color: var(--border-mid); }
+.right-panel { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.action-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.action-btn {
+  display: flex; align-items: center; gap: 7px; padding: 9px 18px;
+  border: 1px solid transparent; border-radius: var(--radius-md);
+  font-family: var(--font-ui); font-size: 0.82rem; font-weight: 500;
+  cursor: pointer; transition: all var(--transition); white-space: nowrap;
+  position: relative; overflow: hidden;
+}
+.action-btn::after { content: ''; position: absolute; inset: 0; background: white; opacity: 0; transition: opacity 0.1s; }
+.action-btn:active::after { opacity: 0.08; }
+.btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; box-shadow: 0 2px 12px rgba(99,102,241,0.35); }
+.btn-primary:hover { box-shadow: 0 4px 20px rgba(99,102,241,0.5); transform: translateY(-1px); }
+.btn-secondary { background: var(--bg-elevated); color: var(--text-secondary); border-color: var(--border-mid); }
+.btn-secondary:hover { background: var(--bg-hover); color: var(--text-primary); }
+.btn-success { background: linear-gradient(135deg, var(--success), #059669); color: white; box-shadow: 0 2px 12px rgba(16,185,129,0.3); }
+.btn-success:hover { box-shadow: 0 4px 20px rgba(16,185,129,0.5); transform: translateY(-1px); }
+.btn-accent { background: linear-gradient(135deg, var(--cyan), #0891B2); color: white; box-shadow: 0 2px 12px rgba(6,182,212,0.3); }
+.btn-accent:hover { box-shadow: 0 4px 20px rgba(6,182,212,0.5); transform: translateY(-1px); }
+.btn-danger { background: var(--bg-elevated); color: var(--danger); border-color: rgba(239,68,68,0.2); }
+.btn-danger:hover { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.4); }
+.preview-panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-md); }
+.preview-panel-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; border-bottom: 1px solid var(--border); background: var(--bg-elevated); }
+.preview-controls { display: flex; align-items: center; gap: 8px; }
+.device-btns { display: flex; gap: 4px; background: var(--bg-input); padding: 3px; border-radius: var(--radius-sm); }
+.device-btn { padding: 4px 8px; border: none; background: transparent; border-radius: 4px; cursor: pointer; font-size: 0.85rem; transition: background var(--transition); color: var(--text-muted); }
+.device-btn.active, .device-btn:hover { background: var(--bg-hover); }
+.preview-container {
+  min-height: 280px; display: flex; align-items: center; justify-content: center; padding: 40px;
+  background:
+    radial-gradient(circle at 25% 25%, rgba(99,102,241,0.04) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(6,182,212,0.04) 0%, transparent 50%),
+    repeating-conic-gradient(var(--bg-elevated) 0%, var(--bg-elevated) 25%, transparent 0%, transparent 50%) 0 0 / 24px 24px;
+  transition: all var(--transition);
+}
+.preview-container.tablet { max-width: 768px; margin: 0 auto; }
+.preview-container.mobile { max-width: 375px; margin: 0 auto; }
+.preview-box {
+  font-size: 32px; color: #F8FAFC; background-color: #1e1e2e;
+  border: 0px solid #6366f1; border-radius: 12px; padding: 24px; margin: 0px;
+  font-family: 'DM Sans', sans-serif; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  word-break: break-word; max-width: 100%;
+}
+.code-panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-sm); }
+.code-panel-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; border-bottom: 1px solid var(--border); background: var(--bg-elevated); }
+.code-actions { display: flex; gap: 6px; }
+.mini-btn {
+  display: flex; align-items: center; gap: 5px; padding: 5px 10px;
+  background: var(--bg-input); border: 1px solid var(--border-mid);
+  border-radius: var(--radius-sm); color: var(--text-secondary);
+  font-family: var(--font-ui); font-size: 0.75rem; cursor: pointer; transition: all var(--transition);
+}
+.mini-btn:hover { background: var(--bg-hover); color: var(--text-primary); border-color: var(--primary); }
+.mini-btn.copied { background: rgba(16,185,129,0.1); border-color: var(--success); color: var(--success); }
+.code-block { padding: 18px 20px; overflow-x: auto; background: var(--bg-surface); }
+.code-block code { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-secondary); white-space: pre; display: block; line-height: 1.8; }
+.css-selector { color: #F8C555; }
+.css-brace    { color: #94A3B8; }
+.css-property { color: #7DD3FC; }
+.css-colon    { color: #94A3B8; }
+.css-value    { color: #86EFAC; }
+.css-semi     { color: #94A3B8; }
+.css-comment  { color: #4A5568; font-style: italic; }
+.saved-section { max-width: 1600px; margin: 0 auto; padding: 0 20px 40px; }
+.saved-section-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 0 16px; border-top: 1px solid var(--border); margin-top: 4px; }
+.saved-title { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
+.saved-title-icon { font-size: 1.1rem; }
+.saved-count { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); background: var(--bg-elevated); border: 1px solid var(--border); padding: 3px 10px; border-radius: 99px; }
+.saved-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+.saved-empty { grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 48px 24px; background: var(--bg-panel); border: 1px dashed var(--border-mid); border-radius: var(--radius-xl); text-align: center; color: var(--text-muted); font-size: 0.85rem; }
+.empty-icon { font-size: 2.5rem; opacity: 0.4; }
+.saved-empty strong { color: var(--text-secondary); }
+.style-card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; transition: all var(--transition); position: relative; animation: cardIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+@keyframes cardIn { from { opacity: 0; transform: scale(0.9) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+.style-card:hover { border-color: var(--border-bright); box-shadow: var(--shadow-glow); transform: translateY(-2px); }
+.card-preview {
+  min-height: 90px; display: flex; align-items: center; justify-content: center;
+  padding: 20px; position: relative; overflow: hidden;
+  background: repeating-conic-gradient(var(--bg-elevated) 0%, var(--bg-elevated) 25%, transparent 0%, transparent 50%) 0 0 / 20px 20px;
+}
+.card-preview-text { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; pointer-events: none; }
+.card-body { padding: 12px 14px; border-top: 1px solid var(--border); background: var(--bg-surface); }
+.card-name { font-size: 0.82rem; font-weight: 600; color: var(--text-primary); margin-bottom: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card-actions { display: flex; gap: 6px; }
+.card-btn { flex: 1; padding: 6px 10px; border-radius: var(--radius-sm); font-family: var(--font-ui); font-size: 0.74rem; font-weight: 500; cursor: pointer; border: 1px solid var(--border); transition: all var(--transition); text-align: center; }
+.card-btn-apply { background: rgba(99,102,241,0.1); color: var(--primary-light); border-color: rgba(99,102,241,0.25); }
+.card-btn-apply:hover { background: rgba(99,102,241,0.2); border-color: var(--primary); }
+.card-btn-delete { background: transparent; color: var(--text-muted); max-width: 36px; display: flex; align-items: center; justify-content: center; }
+.card-btn-delete:hover { background: rgba(239,68,68,0.1); color: var(--danger); border-color: rgba(239,68,68,0.3); }
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal { background: var(--bg-panel); border: 1px solid var(--border-mid); border-radius: var(--radius-xl); padding: 24px; width: 100%; max-width: 380px; box-shadow: var(--shadow-lg), var(--shadow-glow); transform: scale(0.92) translateY(16px); transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.modal-overlay.open .modal { transform: scale(1) translateY(0); }
+.modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.modal-header h3 { font-size: 1rem; font-weight: 700; }
+.modal-close { width: 28px; height: 28px; border: 1px solid var(--border); background: var(--bg-elevated); border-radius: var(--radius-sm); color: var(--text-muted); cursor: pointer; font-size: 0.8rem; transition: all var(--transition); }
+.modal-close:hover { background: var(--bg-hover); color: var(--danger); }
+.modal-body { margin-bottom: 20px; }
+.modal-footer { display: flex; gap: 10px; justify-content: flex-end; }
+.toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 300; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.toast { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--bg-elevated); border: 1px solid var(--border-mid); border-radius: var(--radius-md); box-shadow: var(--shadow-lg); font-size: 0.82rem; font-weight: 500; color: var(--text-primary); min-width: 220px; pointer-events: all; animation: toastIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); transition: opacity 0.2s, transform 0.2s; }
+.toast.out { opacity: 0; transform: translateX(20px); }
+@keyframes toastIn { from { opacity: 0; transform: translateX(20px) scale(0.9); } to { opacity: 1; transform: translateX(0) scale(1); } }
+.toast-icon { font-size: 1rem; flex-shrink: 0; }
+.toast-success { border-color: rgba(16,185,129,0.3); }
+.toast-success .toast-icon { color: var(--success); }
+.toast-error   { border-color: rgba(239,68,68,0.3); }
+.toast-error   .toast-icon { color: var(--danger); }
+.toast-info    { border-color: rgba(99,102,241,0.3); }
+.toast-info    .toast-icon { color: var(--primary-light); }
+@media (max-width: 1024px) { :root { --panel-width: 280px; } }
+@media (max-width: 768px) {
+  .app-main { grid-template-columns: 1fr; padding: 12px; gap: 12px; }
+  .control-panel { position: static; max-height: none; }
+  .control-panel.mobile-collapsed .controls-body { display: none; }
+  .right-panel { order: -1; }
+  .mobile-menu-btn { display: flex; }
+  .header-subtitle { display: none; }
+  .action-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .action-btn { justify-content: center; }
+  .preview-container { padding: 20px; min-height: 200px; }
+  .saved-grid { grid-template-columns: 1fr 1fr; }
+  .saved-section { padding: 0 12px 24px; }
+}
+@media (max-width: 480px) {
+  .saved-grid { grid-template-columns: 1fr; }
+  .action-bar { grid-template-columns: 1fr; }
+}
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(99,102,241,0.4); }
+  70%  { box-shadow: 0 0 0 8px rgba(99,102,241,0); }
+  100% { box-shadow: 0 0 0 0 rgba(99,102,241,0); }
+}
+.pulse { animation: pulse-ring 1s; }
+:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.preview-expanded .preview-container { min-height: 480px; }
+  </style>
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="header-brand">
+        <div class="brand-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="28" height="28" rx="8" fill="url(#brandGrad)"/>
+            <path d="M7 10l4 4-4 4M13 18h8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="brandGrad" x1="0" y1="0" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#6366F1"/>
+                <stop offset="1" stop-color="#06B6D4"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div>
+          <h1 class="header-title">HTML Quick Styler</h1>
+          <p class="header-subtitle">Design and preview HTML styles instantly</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <span class="header-badge">v1.0</span>
+        <button class="header-btn" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">
+          <span class="theme-icon">☀️</span>
+        </button>
+        <button class="header-btn mobile-menu-btn" id="mobileMenuToggle" aria-label="Toggle mobile menu">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <aside class="control-panel" id="controlPanel">
+      <div class="panel-header">
+        <span class="panel-label">Controls</span>
+        <button class="panel-collapse-btn" id="panelCollapseBtn" aria-label="Collapse panel">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="controls-body" id="controlsBody">
+
+        <section class="control-section" data-accordion="text">
+          <button class="section-header" aria-expanded="true">
+            <span class="section-icon">✏️</span><span>Text Settings</span>
+            <svg class="chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+          <div class="section-body">
+            <div class="control-group">
+              <label for="textInput" class="ctrl-label">Preview Text</label>
+              <input type="text" id="textInput" class="ctrl-input" placeholder="Type your text here..." value="Hello, World!" />
+            </div>
+            <div class="control-group">
+              <label for="fontSizeSlider" class="ctrl-label">Font Size <span class="ctrl-value" id="fontSizeVal">32px</span></label>
+              <input type="range" id="fontSizeSlider" class="ctrl-slider" min="10" max="100" value="32" />
+            </div>
+            <div class="control-group">
+              <label for="fontFamily" class="ctrl-label">Font Family</label>
+              <select id="fontFamily" class="ctrl-select">
+                <option value="'DM Sans', sans-serif">DM Sans</option>
+                <option value="'Syne', sans-serif">Syne</option>
+                <option value="'JetBrains Mono', monospace">JetBrains Mono</option>
+                <option value="Arial, sans-serif">Arial</option>
+                <option value="Georgia, serif">Georgia</option>
+                <option value="'Times New Roman', serif">Times New Roman</option>
+                <option value="'Courier New', monospace">Courier New</option>
+                <option value="Verdana, sans-serif">Verdana</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section class="control-section" data-accordion="colors">
+          <button class="section-header" aria-expanded="true">
+            <span class="section-icon">🎨</span><span>Colors</span>
+            <svg class="chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+          <div class="section-body">
+            <div class="control-group color-row">
+              <div class="color-item">
+                <label for="textColor" class="ctrl-label">Text Color</label>
+                <div class="color-input-wrap">
+                  <input type="color" id="textColor" class="ctrl-color" value="#f8fafc" />
+                  <span class="color-hex" id="textColorHex">#f8fafc</span>
+                </div>
+              </div>
+              <div class="color-item">
+                <label for="bgColor" class="ctrl-label">Background</label>
+                <div class="color-input-wrap">
+                  <input type="color" id="bgColor" class="ctrl-color" value="#1e1e2e" />
+                  <span class="color-hex" id="bgColorHex">#1e1e2e</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="control-section" data-accordion="border">
+          <button class="section-header" aria-expanded="true">
+            <span class="section-icon">◻️</span><span>Border</span>
+            <svg class="chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+          <div class="section-body">
+            <div class="control-group">
+              <label for="borderWidth" class="ctrl-label">Border Width <span class="ctrl-value" id="borderWidthVal">0px</span></label>
+              <input type="range" id="borderWidth" class="ctrl-slider" min="0" max="20" value="0" />
+            </div>
+            <div class="control-group">
+              <label for="borderColor" class="ctrl-label">Border Color</label>
+              <div class="color-input-wrap">
+                <input type="color" id="borderColor" class="ctrl-color" value="#6366f1" />
+                <span class="color-hex" id="borderColorHex">#6366f1</span>
+              </div>
+            </div>
+            <div class="control-group">
+              <label for="borderStyle" class="ctrl-label">Border Style</label>
+              <select id="borderStyle" class="ctrl-select">
+                <option value="solid">Solid</option>
+                <option value="dashed">Dashed</option>
+                <option value="dotted">Dotted</option>
+                <option value="double">Double</option>
+                <option value="groove">Groove</option>
+              </select>
+            </div>
+            <div class="control-group">
+              <label for="borderRadius" class="ctrl-label">Border Radius <span class="ctrl-value" id="borderRadiusVal">12px</span></label>
+              <input type="range" id="borderRadius" class="ctrl-slider" min="0" max="60" value="12" />
+            </div>
+          </div>
+        </section>
+
+        <section class="control-section" data-accordion="spacing">
+          <button class="section-header" aria-expanded="true">
+            <span class="section-icon">↔️</span><span>Spacing</span>
+            <svg class="chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+          <div class="section-body">
+            <div class="control-group">
+              <label for="paddingSlider" class="ctrl-label">Padding <span class="ctrl-value" id="paddingVal">24px</span></label>
+              <input type="range" id="paddingSlider" class="ctrl-slider" min="0" max="80" value="24" />
+            </div>
+            <div class="control-group">
+              <label for="marginSlider" class="ctrl-label">Margin <span class="ctrl-value" id="marginVal">0px</span></label>
+              <input type="range" id="marginSlider" class="ctrl-slider" min="0" max="60" value="0" />
+            </div>
+            <div class="control-group">
+              <label for="letterSpacing" class="ctrl-label">Letter Spacing <span class="ctrl-value" id="letterSpacingVal">0px</span></label>
+              <input type="range" id="letterSpacing" class="ctrl-slider" min="-5" max="20" value="0" />
+            </div>
+            <div class="control-group">
+              <label for="lineHeight" class="ctrl-label">Line Height <span class="ctrl-value" id="lineHeightVal">1.5</span></label>
+              <input type="range" id="lineHeight" class="ctrl-slider" min="1" max="3" step="0.1" value="1.5" />
+            </div>
+          </div>
+        </section>
+
+        <section class="control-section" data-accordion="shadow">
+          <button class="section-header" aria-expanded="true">
+            <span class="section-icon">💫</span><span>Shadow & Glow</span>
+            <svg class="chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+          <div class="section-body">
+            <div class="control-group toggle-row">
+              <label class="ctrl-label">Box Shadow</label>
+              <label class="toggle-switch" for="shadowToggle">
+                <input type="checkbox" id="shadowToggle" /><span class="toggle-track"></span>
+              </label>
+            </div>
+            <div class="control-group">
+              <label for="shadowIntensity" class="ctrl-label">Shadow Intensity <span class="ctrl-value" id="shadowIntensityVal">50%</span></label>
+              <input type="range" id="shadowIntensity" class="ctrl-slider" min="0" max="100" value="50" />
+            </div>
+            <div class="control-group toggle-row">
+              <label class="ctrl-label">Text Shadow</label>
+              <label class="toggle-switch" for="textShadowToggle">
+                <input type="checkbox" id="textShadowToggle" /><span class="toggle-track"></span>
+              </label>
+            </div>
+            <div class="control-group">
+              <label for="opacity" class="ctrl-label">Opacity <span class="ctrl-value" id="opacityVal">100%</span></label>
+              <input type="range" id="opacity" class="ctrl-slider" min="10" max="100" value="100" />
+            </div>
+          </div>
+        </section>
+
+        <section class="control-section" data-accordion="effects">
+          <button class="section-header" aria-expanded="true">
+            <span class="section-icon">⚡</span><span>Text Effects</span>
+            <svg class="chevron" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+          <div class="section-body">
+            <div class="effects-grid">
+              <label class="effect-btn" for="boldToggle"><input type="checkbox" id="boldToggle" /><span class="effect-label"><b>B</b> Bold</span></label>
+              <label class="effect-btn" for="italicToggle"><input type="checkbox" id="italicToggle" /><span class="effect-label"><i>I</i> Italic</span></label>
+              <label class="effect-btn" for="underlineToggle"><input type="checkbox" id="underlineToggle" /><span class="effect-label"><u>U</u> Underline</span></label>
+              <label class="effect-btn" for="uppercaseToggle"><input type="checkbox" id="uppercaseToggle" /><span class="effect-label">AA Upper</span></label>
+              <label class="effect-btn" for="strikeToggle"><input type="checkbox" id="strikeToggle" /><span class="effect-label"><s>S</s> Strike</span></label>
+              <label class="effect-btn" for="italicAltToggle"><input type="checkbox" id="italicAltToggle" /><span class="effect-label">〜 Skew</span></label>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </aside>
+
+    <div class="right-panel">
+      <div class="action-bar">
+        <button class="action-btn btn-primary" id="applyBtn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Apply Style
+        </button>
+        <button class="action-btn btn-secondary" id="resetBtn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8a6 6 0 1 1 1.5 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M2 12V8h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Reset
+        </button>
+        <button class="action-btn btn-success" id="saveBtn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 14h10a1 1 0 0 0 1-1V5l-3-3H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1z" stroke="currentColor" stroke-width="1.5"/><path d="M5 14V9h6v5M5 2v4h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Save
+        </button>
+        <button class="action-btn btn-accent" id="loadBtn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v9M4 7l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 13h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Load Last
+        </button>
+        <button class="action-btn btn-danger" id="deleteBtn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 5h10M6 5V3h4v2M7 8v4M9 8v4M4 5l1 8h6l1-8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Delete
+        </button>
+      </div>
+
+      <div class="preview-panel">
+        <div class="preview-panel-header">
+          <span class="panel-label">Live Preview</span>
+          <div class="preview-controls">
+            <button class="mini-btn" id="previewSizeToggle" title="Toggle preview size">⤢</button>
+            <div class="device-btns">
+              <button class="device-btn active" data-device="desktop" title="Desktop">🖥</button>
+              <button class="device-btn" data-device="tablet" title="Tablet">📱</button>
+              <button class="device-btn" data-device="mobile" title="Mobile">📲</button>
+            </div>
+          </div>
+        </div>
+        <div class="preview-container" id="previewContainer">
+          <div class="preview-box" id="previewBox">Hello, World!</div>
+        </div>
+      </div>
+
+      <div class="code-panel">
+        <div class="code-panel-header">
+          <span class="panel-label">Generated CSS</span>
+          <div class="code-actions">
+            <button class="mini-btn" id="copyCSSBtn" title="Copy CSS">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="4" y="4" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 10V2h8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              Copy
+            </button>
+            <button class="mini-btn" id="downloadCSSBtn" title="Download CSS file">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2v7M4 6l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 11h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              Download
+            </button>
+          </div>
+        </div>
+        <pre class="code-block" id="cssCodeBlock"><code id="cssCode">/* Your generated CSS will appear here */</code></pre>
+      </div>
+    </div>
+  </main>
+
+  <section class="saved-section">
+    <div class="saved-section-header">
+      <h2 class="saved-title"><span class="saved-title-icon">🗂</span>Saved Styles</h2>
+      <span class="saved-count" id="savedCount">0 styles</span>
+    </div>
+    <div class="saved-grid" id="savedGrid">
+      <div class="saved-empty" id="savedEmpty">
+        <div class="empty-icon">💾</div>
+        <p>No saved styles yet.<br/>Style something and click <strong>Save</strong> to keep it.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal-overlay" id="saveModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modalTitle">Save Style</h3>
+        <button class="modal-close" id="modalClose" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <label for="styleName" class="ctrl-label">Style Name</label>
+        <input type="text" id="styleName" class="ctrl-input" placeholder="e.g. Hero Heading, Card Title..." />
+      </div>
+      <div class="modal-footer">
+        <button class="action-btn btn-secondary" id="modalCancel">Cancel</button>
+        <button class="action-btn btn-success" id="modalSave">Save Style</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <script>
+const defaultState = {
+  text:'Hello, World!',fontSize:32,fontFamily:"'DM Sans', sans-serif",
+  textColor:'#f8fafc',bgColor:'#1e1e2e',borderWidth:0,borderColor:'#6366f1',
+  borderStyle:'solid',borderRadius:12,padding:24,margin:0,letterSpacing:0,
+  lineHeight:1.5,shadowOn:false,shadowIntensity:50,textShadowOn:false,opacity:100,
+  bold:false,italic:false,underline:false,uppercase:false,strike:false,skew:false,
+};
+const copyState = s => JSON.parse(JSON.stringify(s));
+let state = copyState(defaultState);
+const $ = id => document.getElementById(id);
+const els = {
+  textInput:$('textInput'),fontSizeSlider:$('fontSizeSlider'),fontSizeVal:$('fontSizeVal'),
+  fontFamily:$('fontFamily'),textColor:$('textColor'),textColorHex:$('textColorHex'),
+  bgColor:$('bgColor'),bgColorHex:$('bgColorHex'),borderWidth:$('borderWidth'),
+  borderWidthVal:$('borderWidthVal'),borderColor:$('borderColor'),borderColorHex:$('borderColorHex'),
+  borderStyle:$('borderStyle'),borderRadius:$('borderRadius'),borderRadiusVal:$('borderRadiusVal'),
+  paddingSlider:$('paddingSlider'),paddingVal:$('paddingVal'),marginSlider:$('marginSlider'),
+  marginVal:$('marginVal'),letterSpacing:$('letterSpacing'),letterSpacingVal:$('letterSpacingVal'),
+  lineHeight:$('lineHeight'),lineHeightVal:$('lineHeightVal'),shadowToggle:$('shadowToggle'),
+  shadowIntensity:$('shadowIntensity'),shadowIntensityVal:$('shadowIntensityVal'),
+  textShadowToggle:$('textShadowToggle'),opacity:$('opacity'),opacityVal:$('opacityVal'),
+  boldToggle:$('boldToggle'),italicToggle:$('italicToggle'),underlineToggle:$('underlineToggle'),
+  uppercaseToggle:$('uppercaseToggle'),strikeToggle:$('strikeToggle'),italicAltToggle:$('italicAltToggle'),
+  previewBox:$('previewBox'),previewContainer:$('previewContainer'),cssCode:$('cssCode'),
+  applyBtn:$('applyBtn'),resetBtn:$('resetBtn'),saveBtn:$('saveBtn'),loadBtn:$('loadBtn'),
+  deleteBtn:$('deleteBtn'),copyCSSBtn:$('copyCSSBtn'),downloadCSSBtn:$('downloadCSSBtn'),
+  previewSizeToggle:$('previewSizeToggle'),saveModal:$('saveModal'),styleName:$('styleName'),
+  modalClose:$('modalClose'),modalCancel:$('modalCancel'),modalSave:$('modalSave'),
+  savedGrid:$('savedGrid'),savedCount:$('savedCount'),savedEmpty:$('savedEmpty'),
+  themeToggle:$('themeToggle'),mobileMenuToggle:$('mobileMenuToggle'),
+  controlPanel:$('controlPanel'),toastContainer:$('toastContainer'),
+};
+function readControlsToState() {
+  state.text=els.textInput.value||'Hello, World!';state.fontSize=parseInt(els.fontSizeSlider.value);
+  state.fontFamily=els.fontFamily.value;state.textColor=els.textColor.value;state.bgColor=els.bgColor.value;
+  state.borderWidth=parseInt(els.borderWidth.value);state.borderColor=els.borderColor.value;
+  state.borderStyle=els.borderStyle.value;state.borderRadius=parseInt(els.borderRadius.value);
+  state.padding=parseInt(els.paddingSlider.value);state.margin=parseInt(els.marginSlider.value);
+  state.letterSpacing=parseInt(els.letterSpacing.value);state.lineHeight=parseFloat(els.lineHeight.value);
+  state.shadowOn=els.shadowToggle.checked;state.shadowIntensity=parseInt(els.shadowIntensity.value);
+  state.textShadowOn=els.textShadowToggle.checked;state.opacity=parseInt(els.opacity.value);
+  state.bold=els.boldToggle.checked;state.italic=els.italicToggle.checked;
+  state.underline=els.underlineToggle.checked;state.uppercase=els.uppercaseToggle.checked;
+  state.strike=els.strikeToggle.checked;state.skew=els.italicAltToggle.checked;
+}
+function writeStateToControls() {
+  els.textInput.value=state.text;els.fontSizeSlider.value=state.fontSize;
+  els.fontFamily.value=state.fontFamily;els.textColor.value=state.textColor;
+  els.bgColor.value=state.bgColor;els.borderWidth.value=state.borderWidth;
+  els.borderColor.value=state.borderColor;els.borderStyle.value=state.borderStyle;
+  els.borderRadius.value=state.borderRadius;els.paddingSlider.value=state.padding;
+  els.marginSlider.value=state.margin;els.letterSpacing.value=state.letterSpacing;
+  els.lineHeight.value=state.lineHeight;els.shadowToggle.checked=state.shadowOn;
+  els.shadowIntensity.value=state.shadowIntensity;els.textShadowToggle.checked=state.textShadowOn;
+  els.opacity.value=state.opacity;els.boldToggle.checked=state.bold;
+  els.italicToggle.checked=state.italic;els.underlineToggle.checked=state.underline;
+  els.uppercaseToggle.checked=state.uppercase;els.strikeToggle.checked=state.strike;
+  els.italicAltToggle.checked=state.skew;updateAllLabels();
+}
+function updateAllLabels() {
+  els.fontSizeVal.textContent=state.fontSize+'px';els.textColorHex.textContent=state.textColor;
+  els.bgColorHex.textContent=state.bgColor;els.borderWidthVal.textContent=state.borderWidth+'px';
+  els.borderColorHex.textContent=state.borderColor;els.borderRadiusVal.textContent=state.borderRadius+'px';
+  els.paddingVal.textContent=state.padding+'px';els.marginVal.textContent=state.margin+'px';
+  els.letterSpacingVal.textContent=state.letterSpacing+'px';els.lineHeightVal.textContent=state.lineHeight;
+  els.shadowIntensityVal.textContent=state.shadowIntensity+'%';els.opacityVal.textContent=state.opacity+'%';
+}
+function buildStyleObject(s) {
+  let boxShadow='none';
+  if(s.shadowOn){const i=s.shadowIntensity/100;const blur=Math.round(8+i*40);const spread=Math.round(i*10);const alpha=(0.1+i*0.5).toFixed(2);boxShadow=`0 ${Math.round(i*20)}px ${blur}px ${spread}px rgba(0,0,0,${alpha})`;}
+  let textShadow='none';
+  if(s.textShadowOn)textShadow='2px 2px 8px rgba(0,0,0,0.5)';
+  let textDecoration='none';
+  if(s.underline&&s.strike)textDecoration='underline line-through';
+  else if(s.underline)textDecoration='underline';
+  else if(s.strike)textDecoration='line-through';
+  return {
+    'font-size':s.fontSize+'px','font-family':s.fontFamily,'color':s.textColor,
+    'background-color':s.bgColor,'border':`${s.borderWidth}px ${s.borderStyle} ${s.borderColor}`,
+    'border-radius':s.borderRadius+'px','padding':s.padding+'px','margin':s.margin+'px',
+    'letter-spacing':s.letterSpacing+'px','line-height':s.lineHeight,'box-shadow':boxShadow,
+    'text-shadow':textShadow,'opacity':(s.opacity/100).toFixed(2),
+    'font-weight':s.bold?'bold':'normal','font-style':s.italic?'italic':'normal',
+    'text-decoration':textDecoration,'text-transform':s.uppercase?'uppercase':'none',
+    'transform':s.skew?'skewX(-8deg)':'none',
+  };
+}
+function applyToPreview() {
+  const styleObj=buildStyleObject(state);const box=els.previewBox;box.textContent=state.text;
+  Object.entries(styleObj).forEach(([prop,val])=>{const camel=prop.replace(/-([a-z])/g,(_,c)=>c.toUpperCase());box.style[camel]=val;});
+}
+function generateCSS() {
+  const styleObj=buildStyleObject(state);
+  const lines=Object.entries(styleObj).filter(([,val])=>val!=='none'&&val!=='normal'&&val!=='1.00').map(([prop,val])=>`  ${prop}: ${val};`);
+  return `.styled-element {\n${lines.join('\n')}\n}`;
+}
+function renderCSSCode() {
+  const raw=generateCSS();
+  const highlighted=raw
+    .replace(/^(\.[\w-]+)/m,'<span class="css-selector">$1</span>')
+    .replace(/(\{|\})/g,'<span class="css-brace">$1</span>')
+    .replace(/([\w-]+)(\s*:)/g,'<span class="css-property">$1</span><span class="css-colon">$2</span>')
+    .replace(/:\s*([^;]+)(;)/g,': <span class="css-value">$1</span><span class="css-semi">;</span>');
+  els.cssCode.innerHTML=highlighted;
+}
+function liveUpdate(){readControlsToState();updateAllLabels();applyToPreview();renderCSSCode();}
+function bindControlEvents() {
+  const liveInputs=[els.textInput,els.fontSizeSlider,els.fontFamily,els.textColor,els.bgColor,els.borderWidth,els.borderColor,els.borderStyle,els.borderRadius,els.paddingSlider,els.marginSlider,els.letterSpacing,els.lineHeight,els.shadowToggle,els.shadowIntensity,els.textShadowToggle,els.opacity,els.boldToggle,els.italicToggle,els.underlineToggle,els.uppercaseToggle,els.strikeToggle,els.italicAltToggle];
+  liveInputs.forEach(el=>{if(!el)return;el.addEventListener('input',liveUpdate);el.addEventListener('change',liveUpdate);});
+}
+function handleApply(){applyToPreview();renderCSSCode();rippleBtn(els.applyBtn);toast('✅','Styles applied!','success');}
+function handleReset(){state=copyState(defaultState);writeStateToControls();applyToPreview();renderCSSCode();rippleBtn(els.resetBtn);toast('🔄','Reset to defaults','info');}
+function handleSave(){els.styleName.value='';openModal();}
+function handleLoadLast(){const keys=getStoredKeys();if(!keys.length){toast('⚠️','No saved styles found','error');return;}loadStyleByKey(keys[keys.length-1]);toast('📂','Last style loaded!','success');}
+function handleDeleteAll(){const keys=getStoredKeys();if(!keys.length){toast('⚠️','Nothing to delete','error');return;}if(!confirm(`Delete all ${keys.length} saved style(s)?`))return;keys.forEach(k=>localStorage.removeItem(k));renderSavedGrid();toast('🗑️','All styles deleted','info');}
+function openModal(){els.saveModal.classList.add('open');setTimeout(()=>els.styleName.focus(),100);}
+function closeModal(){els.saveModal.classList.remove('open');}
+function handleModalSave(){const name=els.styleName.value.trim()||'Untitled Style';readControlsToState();const data={name,text:state.text,state:copyState(state),savedAt:Date.now()};localStorage.setItem('hqs_'+Date.now(),JSON.stringify(data));closeModal();renderSavedGrid();toast('💾',`"${name}" saved!`,'success');}
+function getStoredKeys(){return Object.keys(localStorage).filter(k=>k.startsWith('hqs_')).sort();}
+function loadStyleByKey(key){const raw=localStorage.getItem(key);if(!raw)return;try{const data=JSON.parse(raw);state={...copyState(defaultState),...data.state};writeStateToControls();applyToPreview();renderCSSCode();}catch{toast('❌','Failed to load style','error');}}
+function deleteStyleByKey(key){localStorage.removeItem(key);renderSavedGrid();toast('🗑️','Style deleted','info');}
+function renderSavedGrid(){
+  const keys=getStoredKeys();
+  Array.from(els.savedGrid.querySelectorAll('.style-card')).forEach(el=>el.remove());
+  els.savedCount.textContent=`${keys.length} style${keys.length!==1?'s':''}`;
+  if(!keys.length){els.savedEmpty.style.display='flex';return;}
+  els.savedEmpty.style.display='none';
+  keys.forEach(key=>{
+    const raw=localStorage.getItem(key);if(!raw)return;
+    let data;try{data=JSON.parse(raw);}catch{return;}
+    const s=data.state||{};
+    const card=document.createElement('div');card.className='style-card';
+    card.innerHTML=`<div class="card-preview"><div class="card-preview-text" style="font-size:${Math.min(s.fontSize||16,28)}px;font-family:${s.fontFamily||'inherit'};color:${s.textColor||'#f8fafc'};background-color:${s.bgColor||'#1e1e2e'};border:${s.borderWidth||0}px ${s.borderStyle||'solid'} ${s.borderColor||'transparent'};border-radius:${Math.min(s.borderRadius||0,12)}px;padding:${Math.min(s.padding||0,12)}px;font-weight:${s.bold?'bold':'normal'};font-style:${s.italic?'italic':'normal'};text-transform:${s.uppercase?'uppercase':'none'};max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(data.text||'Preview')}</div></div><div class="card-body"><div class="card-name">${escapeHtml(data.name||'Untitled')}</div><div class="card-actions"><button class="card-btn card-btn-apply" data-key="${key}">Apply</button><button class="card-btn card-btn-delete" data-key="${key}" title="Delete"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button></div></div>`;
+    card.querySelector('.card-btn-apply').addEventListener('click',()=>{loadStyleByKey(key);toast('✅',`"${data.name}" applied!`,'success');});
+    card.querySelector('.card-btn-delete').addEventListener('click',()=>{card.style.cssText+='transform:scale(0.8);opacity:0;transition:all 0.2s;';setTimeout(()=>deleteStyleByKey(key),200);});
+    els.savedGrid.appendChild(card);
+  });
+}
+function handleCopyCSS(){navigator.clipboard.writeText(generateCSS()).then(()=>{els.copyCSSBtn.classList.add('copied');els.copyCSSBtn.innerHTML=`<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Copied!`;setTimeout(()=>{els.copyCSSBtn.classList.remove('copied');els.copyCSSBtn.innerHTML=`<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="4" y="4" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M2 10V2h8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg> Copy`;},2000);toast('📋','CSS copied to clipboard!','success');}).catch(()=>toast('❌','Copy failed','error'));}
+function handleDownloadCSS(){const blob=new Blob([`/* Generated by HTML Quick Styler */\n\n`+generateCSS()],{type:'text/css'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='styled-element.css';a.click();URL.revokeObjectURL(a.href);toast('⬇️','CSS file downloaded!','success');}
+function initAccordions(){document.querySelectorAll('.section-header').forEach(btn=>{btn.addEventListener('click',()=>{const expanded=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',String(!expanded));btn.nextElementSibling.classList.toggle('collapsed',expanded);});});}
+function initTheme(){const saved=localStorage.getItem('hqs_theme')||'dark';document.documentElement.setAttribute('data-theme',saved);updateThemeIcon(saved);els.themeToggle.addEventListener('click',()=>{const next=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',next);localStorage.setItem('hqs_theme',next);updateThemeIcon(next);});}
+function updateThemeIcon(theme){els.themeToggle.querySelector('.theme-icon').textContent=theme==='dark'?'☀️':'🌙';}
+function initMobileMenu(){els.mobileMenuToggle.addEventListener('click',()=>{els.controlPanel.classList.toggle('mobile-collapsed');});}
+function initDeviceButtons(){document.querySelectorAll('.device-btn').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.device-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');els.previewContainer.classList.remove('tablet','mobile');if(btn.dataset.device!=='desktop')els.previewContainer.classList.add(btn.dataset.device);});});}
+function initPreviewSizeToggle(){let expanded=false;els.previewSizeToggle.addEventListener('click',()=>{expanded=!expanded;els.previewBox.closest('.preview-panel').classList.toggle('preview-expanded',expanded);els.previewSizeToggle.textContent=expanded?'⤡':'⤢';});}
+function toast(icon,message,type='info'){const el=document.createElement('div');el.className=`toast toast-${type}`;el.innerHTML=`<span class="toast-icon">${icon}</span> ${escapeHtml(message)}`;els.toastContainer.appendChild(el);setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),250);},2800);}
+function rippleBtn(btn){btn.classList.remove('pulse');void btn.offsetWidth;btn.classList.add('pulse');}
+function escapeHtml(str){const d=document.createElement('div');d.appendChild(document.createTextNode(String(str)));return d.innerHTML;}
+function initKeyboardShortcuts(){document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();handleSave();}if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key==='z'){e.preventDefault();handleReset();}if(e.key==='Escape')closeModal();});}
+function init(){
+  writeStateToControls();applyToPreview();renderCSSCode();bindControlEvents();initAccordions();
+  els.applyBtn.addEventListener('click',handleApply);els.resetBtn.addEventListener('click',handleReset);
+  els.saveBtn.addEventListener('click',handleSave);els.loadBtn.addEventListener('click',handleLoadLast);
+  els.deleteBtn.addEventListener('click',handleDeleteAll);els.copyCSSBtn.addEventListener('click',handleCopyCSS);
+  els.downloadCSSBtn.addEventListener('click',handleDownloadCSS);els.modalClose.addEventListener('click',closeModal);
+  els.modalCancel.addEventListener('click',closeModal);els.modalSave.addEventListener('click',handleModalSave);
+  els.saveModal.addEventListener('click',e=>{if(e.target===els.saveModal)closeModal();});
+  els.styleName.addEventListener('keydown',e=>{if(e.key==='Enter')handleModalSave();});
+  initTheme();initMobileMenu();initDeviceButtons();initPreviewSizeToggle();initKeyboardShortcuts();renderSavedGrid();
+  document.querySelectorAll('.control-section').forEach((sec,i)=>{sec.style.cssText='opacity:0;transform:translateY(12px);transition:opacity 0.3s ease,transform 0.3s ease;';setTimeout(()=>{sec.style.opacity='1';sec.style.transform='translateY(0)';},80+i*50);});
+  setTimeout(()=>toast('👋','Welcome to HTML Quick Styler!','info'),500);
+}
+document.addEventListener('DOMContentLoaded',init);
+  </script>
+</body>
+</html>
